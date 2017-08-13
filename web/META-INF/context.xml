@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/RestEmisionServices">
+  <ResourceLink global="global/jdbc/emision_apl" name="jdbc/emision_apl" type="javax.sql.DataSource"/>
+  <ResourceLink global="global/jdbc/miCFD_apl" name="jdbc/miCFD_apl" type="javax.sql.DataSource"/>
+</Context>
