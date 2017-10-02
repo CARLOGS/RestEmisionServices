@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*; //Importamos la librería para manejar RESTful
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 import sb.reports.ReportUtils;
 
 @Path("getXml/{uuid}") //Especificamos una ruta que se debe usar para invocar este método y un parámetro (tipo)
@@ -19,6 +22,8 @@ public class MongoUtilResource {
     private final LicenciasDao ldao = new LicenciasDao();
     private MongoDAO mdao;
 
+    public MongoUtilResource() {}
+    
     @GET
     @Produces({MediaType.APPLICATION_XML}) // "text/xml"
     public byte[] getXml(@PathParam("uuid") String uuid, @Context HttpServletRequest httpRequest)
@@ -36,7 +41,7 @@ public class MongoUtilResource {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace(System.err);
+                e.printStackTrace(System.out);
 
                 return ("<Error msg=\"" + e.getMessage() + "\" />").getBytes();
             }
@@ -64,7 +69,7 @@ public class MongoUtilResource {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace(System.err);
+                e.printStackTrace(System.out);
 
                 return ("<Error msg=\"" + e.getMessage() + "\" />").getBytes();
             }
@@ -100,7 +105,7 @@ public class MongoUtilResource {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace(System.err);
+                e.printStackTrace(System.out);
 
                 return ("<Error msg=\"" + e.getMessage() + "\" />").getBytes();
             }
@@ -143,11 +148,21 @@ public class MongoUtilResource {
 
                 return baos.toByteArray();
             } catch (Exception e) {
-                e.printStackTrace(System.err);
+                e.printStackTrace(System.out);
 
                 return ("<Error msg=\"" + e.getMessage() + "\" />").getBytes();
             }
         else
             return ("<Error msg=\"IP no autorizada\" />").getBytes();
+    }
+    
+    @Provider
+    public class DebugExceptionMapper implements ExceptionMapper<Exception> {
+
+        @Override
+        public Response toResponse(Exception exception) {
+            exception.printStackTrace(System.out);
+            return Response.serverError().entity(exception.getMessage()).build();
+        } 
     }
 }
