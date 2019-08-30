@@ -36,6 +36,23 @@ public class EPerfiles implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;    
+    @Column(name = "PERFIL")
+    private String perfil;
+    @Column(name = "NUMERO")
+    private Long numero;
+    @Index(name = "PERFIL_PADRE_IDX")
+    @Column(name = "PADRE_ID")
+    private Long padreId;
+    @ManyToOne
+    private EEmitido emitido;
+    @ManyToOne
+    private EClientes clientes;
+    
+
     protected EPerfiles() {}
 
     public EPerfiles(String perfil, Long numero, Long padreId,EClientes clientes) {
@@ -46,22 +63,6 @@ public class EPerfiles implements Serializable {
         this.clientes = clientes;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
-    
-    @Column(name = "PERFIL")
-    private String perfil;
-    private Long numero;
-
-    @Index(name = "PERFIL_PADRE_IDX")
-    @Column(name = "PADRE_ID")
-    private Long padreId;
-    
-    @ManyToOne
-    private EClientes clientes;
-    
     public Long getPadreId() {
         return padreId;
     }
@@ -102,22 +103,33 @@ public class EPerfiles implements Serializable {
         this.id = id;
     }
 
-    @Override 
-    public int hashCode() { 
-        int result = 1; 
-        return result; 
+    public EEmitido getEmitido() {
+        return emitido;
     }
 
-    @Override 
-    public boolean equals(final Object obj) { 
-        if (this == obj) { 
-            return true; 
-        } 
-        if (obj == null) { 
-            return false; 
-        } 
-        return true; 
-    } 
+    public void setEmitido(EEmitido emitido) {
+        this.emitido = emitido;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof EPerfiles)) {
+            return false;
+        }
+        EPerfiles other = (EPerfiles) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
     
     @Override
     public String toString() {

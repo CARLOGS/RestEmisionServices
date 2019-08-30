@@ -23,16 +23,23 @@ import org.hibernate.annotations.Index;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ECfdi.findAll", query = "SELECT m FROM ECfdi m"),
-    @NamedQuery(name = "ECfdi.findAllN", query = "SELECT m FROM ECfdi m WHERE m.clientes = :clientes AND m.fecha >= :fIni AND m.fecha <= :fFin ORDER BY m.fecha DESC"),
-    @NamedQuery(name = "ECfdi.findAllN2", query = "SELECT m FROM ECfdi m WHERE m.clientes = :clientes AND m.fecha >= :fIni AND m.fecha < :fFin ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllN", query = "SELECT m FROM ECfdi m WHERE m.clientes = :clientes AND m.fecha >= :fIni AND m.fecha <= :fFin AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllN2", query = "SELECT m FROM ECfdi m WHERE m.clientes = :clientes AND YEAR(m.fecha) = :anio AND MONTH(m.fecha) = :mes ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllN3", query = "SELECT m FROM ECfdi m WHERE m.clientes = :clientes AND YEAR(m.fecha) = :anio ORDER BY m.fecha DESC"),
     @NamedQuery(name = "ECfdi.findAllId", query = "SELECT m FROM ECfdi m WHERE m.id = :id"),
-    @NamedQuery(name = "ECfdi.findAllNNombre", query = "SELECT m FROM ECfdi m WHERE m.nombre LIKE :nombre AND m.clientes = :clientes ORDER BY m.fecha DESC"),
-    @NamedQuery(name = "ECfdi.findAllNRfc", query = "SELECT m FROM ECfdi m WHERE m.rfc = :rfc AND m.clientes = :clientes ORDER BY m.fecha DESC"),
-    @NamedQuery(name = "ECfdi.findAllNNoFactura", query = "SELECT m FROM ECfdi m WHERE m.numeroFactura = :numeroFactura AND m.clientes = :clientes ORDER BY m.fecha DESC"),
-    @NamedQuery(name = "ECfdi.findAllUuid", query = "SELECT m FROM ECfdi m WHERE m.uuid = :uuid"),
-    @NamedQuery(name = "ECfdi.findAllNUuid", query = "SELECT m FROM ECfdi m WHERE m.uuid = :uuid AND m.clientes = :clientes"),
-    @NamedQuery(name = "ECfdi.findAllNEdoDoc", query = "SELECT m FROM ECfdi m WHERE m.estadoDocumento = :estadoDocumento AND m.clientes = :clientes ORDER BY m.fecha DESC"),
-    @NamedQuery(name = "ECfdi.findAllNWF", query = "SELECT m FROM ECfdi m WHERE m.estatusWF = :wf AND m.clientes = :clientes ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllNNombre", query = "SELECT m FROM ECfdi m WHERE m.nombre LIKE :nombre AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllNNombreRango", query = "SELECT m FROM ECfdi m WHERE m.fecha > :fIni AND m.fecha <= :fFin AND m.nombre LIKE :nombre AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllNRfc", query = "SELECT m FROM ECfdi m WHERE m.rfc = :rfc AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllNRfcRango", query = "SELECT m FROM ECfdi m WHERE m.fecha > :fIni AND m.fecha <= :fFin AND m.rfc = :rfc AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllNNoFactura", query = "SELECT m FROM ECfdi m WHERE m.numeroFactura = :numeroFactura AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findCfdiUuid", query = "SELECT m FROM ECfdi m WHERE m.uuid = :uuid"),
+    @NamedQuery(name = "ECfdi.findAllUuid", query = "SELECT m FROM ECfdi m WHERE m.uuid = :uuid AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido)"),
+    @NamedQuery(name = "ECfdi.findAllUuidFecha", query = "SELECT m FROM ECfdi m WHERE m.uuid = :uuid AND m.fecha = :fecha"),
+    @NamedQuery(name = "ECfdi.findAllNUuid", query = "SELECT m FROM ECfdi m WHERE m.uuid = :uuid AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido)"),
+    @NamedQuery(name = "ECfdi.findAllNEdoDoc", query = "SELECT m FROM ECfdi m WHERE m.estadoDocumento = :estadoDocumento AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllNWF", query = "SELECT m FROM ECfdi m WHERE m.estatusWF = :wf AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllNNumFac", query = "SELECT m FROM ECfdi m WHERE m.numeroFactura = :numFac AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "ECfdi.findAllNFolErp", query = "SELECT m FROM ECfdi m WHERE m.folioErp = :folErp AND m.clientes = :clientes AND ((:emitido IS NULL and m.emitido IS NULL) or m.emitido = :emitido) ORDER BY m.fecha DESC"),
     @NamedQuery(name = "ECfdi.findByAllByClientes", query = "SELECT m FROM ECfdi m WHERE m.clientes = :clientes")
 })
 public class ECfdi implements Serializable {
@@ -41,7 +48,7 @@ public class ECfdi implements Serializable {
 
     protected ECfdi() {}
 
-    public ECfdi(String rfc, String nombre, String uuid, Date fecha, double importe, EClientes clientes) {
+    public ECfdi(String rfc, String nombre, String uuid, Date fecha, Double importe, EClientes clientes) {
         this.rfc = rfc;
         this.nombre = nombre;
         this.uuid = uuid;
@@ -53,7 +60,7 @@ public class ECfdi implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private long id;
+    private Long id;
 
     @Index(name = "RFC_REC_IDX")
     @Column(name = "RFC", nullable = false, length = 13)
@@ -73,7 +80,7 @@ public class ECfdi implements Serializable {
     private Date fecha;
 
     @Column(name = "IMPORTE", nullable = false, scale = 12, precision = 2)
-    private double importe;
+    private Double importe;
     
     @Column(name = "SERIE", nullable = true, length = 20)
     private String serie;
@@ -95,13 +102,13 @@ public class ECfdi implements Serializable {
     private Date fechaCancelacion;
 
     @Column(name = "ESTATUS_ENVIOM", nullable = false)
-    private int estatusEnvioM = 0;
+    private Integer estatusEnvioM = 0;
     
     @Column(name = "ESTADO_DOCUMENTO", nullable = false)
-    private int estadoDocumento = 1;
+    private Integer estadoDocumento = 1;
 
     @Column(name = "MODO", nullable = false)
-    private int modo = 0;
+    private Integer modo = 0;
 
     @Column(name = "MONGO_COLLECTION", nullable = true, length = 10)
     private String mongoCollection;
@@ -114,17 +121,17 @@ public class ECfdi implements Serializable {
 
     @Index(name = "CFDI_ORI_IDX")
     @Column(name = "ORIGEN", nullable = false)
-    private short origen = 1;
+    private Short origen = 1;
 
     @Index(name = "CFDI_ADJ_IDX")
     @Column(name = "ADJUNTO", nullable = false)
-    private short adjunto = 0;
+    private Short adjunto = 0;
 
     @Column(name = "MONEDA", nullable = false)
     private String moneda = "MXN";
 
     @Column(name = "TIPO_CAMBIO", nullable = false)
-    private double tipoCambio = 1d;
+    private Double tipoCambio = 1d;
 
     @ManyToOne
     private EAcceso acceso;
@@ -133,32 +140,50 @@ public class ECfdi implements Serializable {
     private Long items;
 
     @Column(name = "addendas_ID", nullable = true)
-    private long addendas = 0;
+    private Long addendas = 0l;
+
+    @Column(name = "ESTATUS_CANCELA", nullable = true)
+    private Short estatusCancela;
+
+    @Column(name = "CANCELABLE", nullable = true)
+    private Short cancelable;
+
+    @Column(name = "OTRO1", nullable = true)
+    private String otro1;
+
+    @Column(name = "OTRO2", nullable = true)
+    private String otro2;
+
+    @Column(name = "OTRO3", nullable = true)
+    private String otro3;
 
     @ManyToOne
     private EClientes clientes;
 
-    public short getOrigen() {
+    @ManyToOne
+    private EEmitido emitido;
+
+    public Short getOrigen() {
         return origen;
     }
 
-    public void setOrigen(short origen) {
+    public void setOrigen(Short origen) {
         this.origen = origen;
     }
 
-    public short getAdjunto() {
+    public Short getAdjunto() {
         return adjunto;
     }
 
-    public void setAdjunto(short adjunto) {
+    public void setAdjunto(Short adjunto) {
         this.adjunto = adjunto;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -194,19 +219,19 @@ public class ECfdi implements Serializable {
         this.fecha = fecha;
     }
 
-    public double getImporte() {
+    public Double getImporte() {
         return importe;
     }
 
-    public void setImporte(double importe) {
+    public void setImporte(Double importe) {
         this.importe = importe;
     }
 
-    public long getAddendas() {
+    public Long getAddendas() {
         return addendas;
     }
 
-    public void setAddendas(long addendas) {
+    public void setAddendas(Long addendas) {
         this.addendas = addendas;
     }
 
@@ -218,7 +243,7 @@ public class ECfdi implements Serializable {
         this.clientes = clientes;
     }
 
-    public int getEstadoDocumento() {
+    public Integer getEstadoDocumento() {
         return estadoDocumento;
     }
 
@@ -226,7 +251,7 @@ public class ECfdi implements Serializable {
         this.estadoDocumento = estadoDocumento;
     }
 
-    public int getModo() {
+    public Integer getModo() {
         return modo;
     }
 
@@ -274,11 +299,11 @@ public class ECfdi implements Serializable {
         this.moneda = moneda;
     }
 
-    public double getTipoCambio() {
+    public Double getTipoCambio() {
         return tipoCambio;
     }
 
-    public void setTipoCambio(double tipoCambio) {
+    public void setTipoCambio(Double tipoCambio) {
         this.tipoCambio = tipoCambio;
     }
 
@@ -322,12 +347,52 @@ public class ECfdi implements Serializable {
         this.fechaCancelacion = fechaCancelacion;
     }
 
-    public int getEstatusEnvioM() {
+    public Integer getEstatusEnvioM() {
         return estatusEnvioM;
     }
 
     public void setEstatusEnvioM(int estatusEnvioM) {
         this.estatusEnvioM = estatusEnvioM;
+    }
+
+    public Short getEstatusCancela() {
+        return estatusCancela;
+    }
+
+    public void setEstatusCancela(Short estatusCancela) {
+        this.estatusCancela = estatusCancela;
+    }
+
+    public Short getCancelable() {
+        return cancelable;
+    }
+
+    public void setCancelable(Short cancelable) {
+        this.cancelable = cancelable;
+    }
+
+    public String getOtro1() {
+        return otro1;
+    }
+
+    public void setOtro1(String otro1) {
+        this.otro1 = otro1;
+    }
+
+    public String getOtro2() {
+        return otro2;
+    }
+
+    public void setOtro2(String otro2) {
+        this.otro2 = otro2;
+    }
+
+    public String getOtro3() {
+        return otro3;
+    }
+
+    public void setOtro3(String otro3) {
+        this.otro3 = otro3;
     }
 
     public EAcceso getAcceso() {
@@ -344,6 +409,14 @@ public class ECfdi implements Serializable {
 
     public void setItems(Long items) {
         this.items = items;
+    }
+
+    public EEmitido getEmitido() {
+        return emitido;
+    }
+
+    public void setEmitido(EEmitido emitido) {
+        this.emitido = emitido;
     }
 
     @Override

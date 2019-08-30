@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/CarloGS/Documents/apps/itsb/RestEmisionServices/src/java/fe/db/retenciones/ERetenciones.java</file>
+            <file>file:/Users/CarloGS/Documents/apps/itsb/RestEmisionServices/src/java/mx/com/itsb/ws/rest/MongoRetrieve.java</file>
+            <file>file:/Users/CarloGS/Documents/apps/itsb/RestEmisionServices/src/java/fe/db/emision/EmisionDao.java</file>
+            <file>file:/Users/CarloGS/Documents/apps/itsb/RestEmisionServices/src/java/fe/db/mongo/MongoJsonDao.java</file>
+            <file>file:/Users/CarloGS/Documents/apps/itsb/RestEmisionServices/src/java/hibernate.emision_apl.cfg.xml</file>
+            <file>file:/Users/CarloGS/Documents/apps/itsb/RestEmisionServices/src/java/sb/reports/ReportUtils.java</file>
+        </group>
     </open-files>
 </project-private>

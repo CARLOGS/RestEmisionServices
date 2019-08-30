@@ -5,6 +5,9 @@
  */
 package fe.db.emision;
 
+import fe.db.pagos.EPagos;
+import fe.db.pagos.EPagosBorrador;
+import fe.db.retenciones.ERetenciones;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -12,7 +15,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -26,7 +28,7 @@ public class EmisionDao {
         ETipoAcceso prov = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr = ss.createCriteria(ETipoAcceso.class);
             cr.add(Restrictions.eq("tipo", tipo));
@@ -35,7 +37,7 @@ public class EmisionDao {
                 prov = it.next();
             }
 
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -47,7 +49,7 @@ public class EmisionDao {
         EClientes cte = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
 //            Criteria cr = ss.createCriteria(EClientes.class);
 //            cr.add(Restrictions.eq("rfc", rfc));
@@ -60,7 +62,7 @@ public class EmisionDao {
                 cte = it.next();
             }
 
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -72,7 +74,7 @@ public class EmisionDao {
         EClientes cte = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
 //            Criteria cr = ss.createCriteria(EClientes.class);
 //            cr.add(Restrictions.eq("id", cteId));
@@ -84,7 +86,7 @@ public class EmisionDao {
             if (it.hasNext())
                 cte = it.next();
 
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -96,7 +98,7 @@ public class EmisionDao {
         EPerfiles per = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
 //            Criteria cr = ss.createCriteria(EPerfiles.class);
 //            cr.add(Restrictions.eq("id", id));
@@ -108,7 +110,7 @@ public class EmisionDao {
             if (it.hasNext())
                 per = it.next();
 
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -120,7 +122,7 @@ public class EmisionDao {
         EAcceso acc = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
 //            Criteria cr = ss.createCriteria(EAcceso.class);
 //            cr.add(Restrictions.eq("id", id));
@@ -135,7 +137,7 @@ public class EmisionDao {
             if ( it.hasNext() )
                 acc = it.next();
 
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -147,7 +149,7 @@ public class EmisionDao {
         EAcceso acc = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
 //            Criteria cr = ss.createCriteria(EAcceso.class);
 //            cr.add(Restrictions.eq("usuario", user));
@@ -162,7 +164,7 @@ public class EmisionDao {
             if (it.hasNext())
                 acc = it.next();
 
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -173,7 +175,7 @@ public class EmisionDao {
     public List<ECfdi> getRangoCFDIR(String anio, int mes, EClientes cte) {
         List<ECfdi> lst = null;
         Session session = HibernateEmisionApl.getSession();
-        Transaction tran = session.beginTransaction();
+//        Transaction tran = session.beginTransaction();
         try {
             // Fecha Inicio
             Calendar cal1 = Calendar.getInstance();
@@ -223,7 +225,7 @@ public class EmisionDao {
             query.setParameter("fFin", cal2.getTime());
             lst = query.getResultList();
 
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(session);
         }
@@ -236,7 +238,7 @@ public class EmisionDao {
 
         // Recupera Número de Factura(s)
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
 //            Criteria cr = ss.createCriteria(ECfdi.class);
 //            cr = cr.add(Restrictions.eq("id", id));
@@ -251,7 +253,7 @@ public class EmisionDao {
                 cfdi = it.next();
             }
 
-            tran.commit();
+//            tran.commit();
         } catch (HibernateException ex) {
             ex.printStackTrace(System.err);
         } finally {
@@ -265,7 +267,7 @@ public class EmisionDao {
         List<ECfdi> lst = null;
         
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             String str = "ECfdi.findAllN";
             if ( nombre != null)
@@ -302,7 +304,7 @@ public class EmisionDao {
             
             lst = query.getResultList();
 
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -314,7 +316,7 @@ public class EmisionDao {
         List<ECfdi> lst = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             org.hibernate.query.Query<ECfdi> query = 
                 ss.getNamedQuery("ECfdi.findAllNNombre");
@@ -323,7 +325,7 @@ public class EmisionDao {
             
             lst = query.getResultList();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -335,7 +337,7 @@ public class EmisionDao {
         List<ECfdi> lst = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             org.hibernate.query.Query<ECfdi> query = 
                 ss.getNamedQuery("ECfdi.findAllNRfc");
@@ -344,7 +346,7 @@ public class EmisionDao {
             
             lst = query.getResultList();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -356,7 +358,7 @@ public class EmisionDao {
         List<ECfdi> lst = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             org.hibernate.query.Query<ECfdi> query = 
                 ss.getNamedQuery("ECfdi.findAllNNoFactura");
@@ -365,7 +367,7 @@ public class EmisionDao {
             
             lst = query.getResultList();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
@@ -377,10 +379,10 @@ public class EmisionDao {
         ECfdi cfdi = null;
 
         Session ss = HibernateEmisionApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             org.hibernate.query.Query<ECfdi> query = 
-                ss.getNamedQuery("ECfdi.findAllUuid");
+                ss.getNamedQuery("ECfdi.findCfdiUuid");
             query.setParameter("uuid", uuid);
             
             for (ECfdi cf :  query.getResultList() ) {
@@ -388,11 +390,100 @@ public class EmisionDao {
                 break;
             }
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateEmisionApl.close(ss);
         }
         
         return cfdi;
+    }
+
+    public EPagos getPagosUuid(String uuid) {
+        EPagos epago = null;
+
+        Session ss = HibernateEmisionApl.getSession();
+//        Transaction tran = ss.beginTransaction();
+        try {
+            org.hibernate.query.Query<EPagos> query = 
+                ss.getNamedQuery("EPagos.findAllUuid");
+            query.setParameter("uuid", uuid);
+            
+            for (EPagos cf :  query.getResultList() ) {
+                epago = cf;
+                break;
+            }
+            
+//            tran.commit();
+        } finally {
+            HibernateEmisionApl.close(ss);
+        }
+        
+        return epago;
+    }
+
+    public EPagosBorrador getPagosBorradorUuid(String uuid) {
+        EPagosBorrador epago = null;
+
+        Session ss = HibernateEmisionApl.getSession();
+//        Transaction tran = ss.beginTransaction();
+        try {
+            org.hibernate.query.Query<EPagosBorrador> query = 
+                ss.getNamedQuery("EPagosBorrador.findAllUuid");
+            query.setParameter("uuid", uuid);
+            
+            for (EPagosBorrador cf :  query.getResultList() ) {
+                epago = cf;
+                break;
+            }
+            
+//            tran.commit();
+        } finally {
+            HibernateEmisionApl.close(ss);
+        }
+        
+        return epago;
+    }
+
+    public EAutoCfdi getAutoCfdiRef(String ref) {
+        EAutoCfdi auto = null;
+
+        Session ss = HibernateEmisionApl.getSession();
+//        Transaction tran = ss.beginTransaction();
+        try {
+            org.hibernate.query.Query<EAutoCfdi> query = 
+                ss.getNamedQuery("EAutoCfdi.findAllReferencia");
+            query.setParameter("referencia", ref);
+            
+            for (EAutoCfdi cf :  query.getResultList() ) {
+                auto = cf;
+                break;
+            }
+            
+//            tran.commit();
+        } finally {
+            HibernateEmisionApl.close(ss);
+        }
+        
+        return auto;
+    }
+
+    public ERetenciones getRetsUuid(String uuid) {
+        ERetenciones erets = null;
+
+        Session ss = HibernateEmisionApl.getSession();
+        try {
+            org.hibernate.query.Query<ERetenciones> query = 
+                ss.getNamedQuery("ERetenciones.findAllUuid");
+            query.setParameter("uuid", uuid);
+            
+            for (ERetenciones cf :  query.getResultList() ) {
+                erets = cf;
+                break;
+            }
+        } finally {
+            HibernateEmisionApl.close(ss);
+        }
+        
+        return erets;
     }
 }

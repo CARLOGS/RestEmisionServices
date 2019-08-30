@@ -30,8 +30,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "EAcceso.findAll", query = "SELECT m FROM EAcceso m"),
     @NamedQuery(name = "EAcceso.findAllId", query = "SELECT m FROM EAcceso m WHERE m.id = :id"),
+    @NamedQuery(name = "EAcceso.findAllN", query = "SELECT m FROM EAcceso m WHERE m.clientes = :clientes ORDER BY m.usuario"),
     @NamedQuery(name = "EAcceso.findAllNUs", query = "SELECT m FROM EAcceso m WHERE m.usuario = :usuario"),
-    @NamedQuery(name = "EAcceso.findAllNDesc", query = "SELECT m FROM EAcceso m WHERE m.nombre LIKE :nombre AND m.clientes = :clientes ORDER BY m.nombre")
+    @NamedQuery(name = "EAcceso.findAllNUsuario", query = "SELECT m FROM EAcceso m WHERE m.usuario = :usuario AND m.clientes = :clientes ORDER BY m.usuario"),
+    @NamedQuery(name = "EAcceso.findAllNNombre", query = "SELECT m FROM EAcceso m WHERE m.nombre LIKE :nombre AND m.clientes = :clientes ORDER BY m.nombre")
 })
 public class EAcceso implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -302,15 +304,17 @@ public class EAcceso implements Serializable {
     }
 
     @Override 
-    public boolean equals(final Object obj) { 
-        if (this == obj) { 
-            return true; 
-        } 
-        if (obj == null) { 
-            return false; 
-        } 
-        return true; 
-    } 
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof EAcceso)) {
+            return false;
+        }
+        EAcceso other = (EAcceso) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @return the numero

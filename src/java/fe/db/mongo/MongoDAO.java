@@ -1,10 +1,5 @@
 package fe.db.mongo;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -13,12 +8,16 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class MongoDAO {
 
     private static DB db;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public MongoDAO() throws Exception {
         ResourceBundle rb = ResourceBundle.getBundle("fe.db.mongo.Mongo");
@@ -42,7 +41,25 @@ public class MongoDAO {
         }
     }
 
-    public void saveDoc(MongoDocument mdoc) throws Exception {
+    public void insertDoc(BasicDBObject mdoc, String collection) throws Exception {
+        DBCollection coll = db.getCollection(collection);
+
+        coll.insert(mdoc);
+    }
+
+    public void updateDoc(BasicDBObject mdoc, String collection) throws Exception {
+        DBCollection coll = db.getCollection(collection);
+        
+        BasicDBObject docOri = getDoc(collection, mdoc.getLong("id"));
+        if ( docOri == null )
+            coll.insert(mdoc);
+        else
+            coll.update(docOri, mdoc);
+
+        coll.insert(mdoc);
+    }
+
+    public void insertDoc(MongoDocument mdoc) throws Exception {
         DBCollection coll = db.getCollection(mdoc.getCollection());
 
         BasicDBObject doc = new BasicDBObject("uuid", mdoc.getUuid()).
@@ -96,9 +113,15 @@ public class MongoDAO {
                 mdoc.setRe(bobj.get("re").toString());
                 mdoc.setRr(bobj.get("rr").toString());
                 mdoc.setZip("ZIP".equals(bobj.get("zip").toString()));
-                mdoc.setXml((byte[]) bobj.get("xmlBytes"));
-                if (bobj.get("pdfBytes") != null) {
-                    mdoc.setPdf((byte[]) bobj.get("pdfBytes"));
+                
+                byte[] objx = (byte[])bobj.get("xmlBytes");
+                if (objx != null) {
+                    mdoc.setXml(objx);
+                }
+                
+                byte[] objp = (byte[])bobj.get("pdfBytes");
+                if (objp != null) {
+                    mdoc.setPdf(objp);
                 }
             }
         } finally {
@@ -235,6 +258,25 @@ public class MongoDAO {
         }
 
         return bobj == null ? null : bobj.get("imgBytes");
+    }
+
+    public MongoDocument getAcuseFromMongo(String mongoColl, String uuid) throws Exception {
+        return readDocByUuid(mongoColl + "C", uuid);
+    }
+
+    public void delDoc(String uuid, String mongoColl) {
+        DBCollection coll = db.getCollection(mongoColl);
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("uuid", uuid);
+        
+        DBCursor cursor = coll.find(query);
+        try {
+            while ( cursor.hasNext() ) 
+                coll.remove(cursor.next());
+        } finally {
+            cursor.close();
+        }
     }
 
     public static class MongoDocument implements Serializable {

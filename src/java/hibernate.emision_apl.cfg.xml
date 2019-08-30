@@ -16,10 +16,22 @@
     <property name="hibernate.format_sql">true</property>
 
     <!-- "Import" the mapping resources here -->
+	<mapping class="fe.db.emision.EAutoCfdi"/>
+	<mapping class="fe.db.emision.EAutoClientes"/>
+	<mapping class="fe.db.emision.EAutoServicio"/>
+	<mapping class="fe.db.emision.EAutoServicioCliente"/>
+	<mapping class="fe.db.emision.ERegimen"/>
 	<mapping class="fe.db.emision.EAcceso"/>
+	<mapping class="fe.db.emision.EEmitido"/>
         <mapping class="fe.db.emision.EPerfiles"/>
 	<mapping class="fe.db.emision.ECfdi"/>
 	<mapping class="fe.db.emision.ETipoAcceso"/>
 	<mapping class="fe.db.emision.EClientes"/>
+	<mapping class="fe.db.pagos.EPagos"/>
+	<mapping class="fe.db.pagos.EPagosCfdi"/>
+	<mapping class="fe.db.pagos.EPagosBorrador"/>
+        <mapping class="fe.db.retenciones.ERetenciones"/>
+        <mapping class="fe.db.retenciones.CRTipo"/>
+        <mapping class="fe.db.retenciones.CRDivUtil"/>
   </session-factory>
 </hibernate-configuration> 

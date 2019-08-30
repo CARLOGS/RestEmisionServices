@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration
+  PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN"
+  "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <!-- property name="hibernate.connection.url">jdbc:mysql://localhost:3306/minteracciones</property -->
+    <!-- property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property -->
+    <!-- property name="hibernate.connection.username">root</property -->
+    <!-- property name="hibernate.connection.password">e4bhse12</property -->
+    <!-- property name="hibernate.connection.pool_size">0</property -->
+    <!-- property name="hibernate.hbm2ddl.auto">create</property -->
+	
+    <!-- TOMCAT -->
+    <property name="connection.datasource">java:/comp/env/jdbc/dec_licencias_apl</property>
+    <!-- PAYARA -->
+    <!-- property name="connection.datasource">jdbc/miCFD_apl</property -->
+
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+	<!-- property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property -->
+
+	<!-- Bind the getCurrentSession() method to the thread. -->
+            <!-- property name="current_session_context_class">thread</property -->
+            <property name="current_session_context_class">managed</property>
+            <!-- 1: READ UNCOMMITTED -->
+            <!-- 2: READ COMMITTED -->
+            <!-- 4: REPEATABLE READ -->
+            <!-- 8: SERIALIZABLE -->
+            <!-- property name="hibernate.connection.isolation">2</property -->
+            
+	<!-- Disable second-level cache. -->
+		<!-- property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property -->
+		<!-- property name="cache.use_query_cache">false</property -->
+		<!-- property name="cache.use_minimal_puts">false</property -->
+		<!-- property name="max_fetch_depth">3</property -->
+		
+	<!-- configuration pool via c3p0--> 
+		<!-- property name="c3p0.acquire_increment">1</property--> 
+		<!-- property name="c3p0.idle_test_period">100</property--> <!-- seconds --> 
+		<!-- property name="c3p0.max_size">100</property--> 
+		<!-- property name="c3p0.max_statements">0</property--> 
+		<!-- property name="c3p0.min_size">10</property--> 
+		<!-- property name="c3p0.timeout">100</property--> <!-- seconds --> 
+	<!-- DEPRECATED very expensive property name="c3p0.validate>--> 
+	
+    <!-- You will usually want to set this to true while debugging Hibernate queries -->
+    <property name="hibernate.show_sql">false</property>
+    <property name="hibernate.format_sql">true</property>
+
+    <!-- "Import" the mapping resources here -->
+    <mapping class="fe.db.dec.MLicencias"/>
+    <mapping class="fe.db.dec.MItems"/>
+    <mapping class="fe.db.dec.MItemsBin"/>
+    <mapping class="fe.db.dec.MItemsLicencias"/>
+  </session-factory>
+</hibernate-configuration> 

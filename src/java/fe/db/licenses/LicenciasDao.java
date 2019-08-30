@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -28,7 +27,7 @@ public class LicenciasDao {
         MLicencias lic = null;
         
         Session ss = HibernateLicenciasApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr = ss.createCriteria(MLicencias.class);
             cr.add(Restrictions.eq("id", id));
@@ -36,7 +35,7 @@ public class LicenciasDao {
             if ( it.hasNext() )
                 lic = it.next();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateLicenciasApl.close(ss);
         }
@@ -48,7 +47,7 @@ public class LicenciasDao {
         MLicencias lic = null;
         
         Session ss = HibernateLicenciasApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr = ss.createCriteria(MLicencias.class);
             cr.add(Restrictions.eq("rfc", rfc));
@@ -56,7 +55,7 @@ public class LicenciasDao {
             if ( it.hasNext() )
                 lic = it.next();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateLicenciasApl.close(ss);
         }
@@ -68,7 +67,7 @@ public class LicenciasDao {
         byte[] bytes = null;
         
         Session ss = HibernateLicenciasApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr = ss.createCriteria(MItemsBin.class);
             cr.add(Restrictions.eq("items", getItem(licencia)));
@@ -77,7 +76,7 @@ public class LicenciasDao {
             if ( it.hasNext() )
                 bytes = it.next().getObjeto();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateLicenciasApl.close(ss);
         }
@@ -89,7 +88,7 @@ public class LicenciasDao {
         byte[] bytes = null;
         
         Session ss = HibernateLicenciasApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr0 = ss.createCriteria(MItems.class);
             cr0.add(Restrictions.eq("id", itemId != null ? itemId.intValue() : null));
@@ -102,7 +101,7 @@ public class LicenciasDao {
             if ( it.hasNext() )
                 bytes = it.next().getObjeto();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateLicenciasApl.close(ss);
         }
@@ -114,7 +113,7 @@ public class LicenciasDao {
         MItems item = null;
         
         Session ss = HibernateLicenciasApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr = ss.createCriteria(MItemsLicencias.class);
             cr = ss.createCriteria(MItemsLicencias.class);
@@ -140,7 +139,7 @@ public class LicenciasDao {
             } else
                 item = getGenerica();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateLicenciasApl.close(ss);
         }
@@ -152,7 +151,7 @@ public class LicenciasDao {
         MItems item = null;
         
         Session ss = HibernateLicenciasApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr = ss.createCriteria(MItems.class);
             cr.add(Restrictions.eq("alcance", 2));
@@ -161,7 +160,7 @@ public class LicenciasDao {
             
             item = (MItems)cr.uniqueResult();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateLicenciasApl.close(ss);
         }
@@ -172,7 +171,7 @@ public class LicenciasDao {
     public List<MItems> getAdendas(EClientes ctes) {
         List<MItems> lAdendas = new ArrayList<MItems>();
         Session ss = HibernateLicenciasApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr = ss.createCriteria(MItemsLicencias.class);
             cr.add(Restrictions.eq("licenciasID", ctes.getLicenciaID()));
@@ -191,7 +190,7 @@ public class LicenciasDao {
 
             lAdendas = cr2.list();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateLicenciasApl.close(ss);
         }
@@ -202,7 +201,7 @@ public class LicenciasDao {
     public List<MItems> getComplementos(EClientes ctes) {
         List<MItems> lAdendas = new ArrayList<MItems>();
         Session ss = HibernateLicenciasApl.getSession();
-        Transaction tran = ss.beginTransaction();
+//        Transaction tran = ss.beginTransaction();
         try {
             Criteria cr = ss.createCriteria(MItemsLicencias.class);
             cr.add(Restrictions.eq("licenciasID", ctes.getLicenciaID()));
@@ -221,7 +220,7 @@ public class LicenciasDao {
             
             lAdendas = cr.list();
             
-            tran.commit();
+//            tran.commit();
         } finally {
             HibernateLicenciasApl.close(ss);
         }

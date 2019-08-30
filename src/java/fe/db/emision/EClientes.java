@@ -1,8 +1,11 @@
 package fe.db.emision;
 
+//import fe.db.pagos.EPagos;
 import java.io.Serializable;
 import java.util.Date;
 
+//import javax.persistence.Fet;
+//import javax.persistence.OneToMany;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +17,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+//import java.util.Set;
+//import org.hibernate.annotations.Fetch;
+//import org.hibernate.annotations.FetchMode;
+//import org.hibernate.annotations.BatchSize;
 
 import org.hibernate.annotations.Index;
 
@@ -90,7 +97,7 @@ public class EClientes implements Serializable {
     @Column(name = "NUMERO_CLIENTE", nullable = true, length = 20)
     private String numeroCliente;
 
-    @Column(name = "licencia_ID", nullable = true)
+    @Column(name = "licencia_ID", nullable = true, insertable = false, updatable = false)
     private Long licenciaID;
 
     @Column(name = "COPIAR_CORREO", nullable = false, length = 1)
@@ -98,12 +105,22 @@ public class EClientes implements Serializable {
     
     @Column(name = "CTRL_EXISTENCIAS", nullable = true)
     private boolean ctrlExistencias = false;
-
+    
     /**
      * Campo para definir el modo de timbrado, 0-Desarrollo y 1-Producción
      */
     @Column(name = "MODO", nullable = false, length = 1)
     private int modo = 0;
+
+//    @OneToMany(mappedBy = "cfdi")
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size=20)
+//    private Set<ECfdi> cfdi;
+
+//    @OneToMany(mappedBy = "pagos")
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size=20)
+//    private Set<EPagos> pagos;
 
     public long getId() {
         return id;
@@ -248,6 +265,22 @@ public class EClientes implements Serializable {
     public void setCtrlExistencias(boolean ctrlExistencias) {
         this.ctrlExistencias = ctrlExistencias;
     }
+
+//    public Set<ECfdi> getCfdi() {
+//        return cfdi;
+//    }
+//
+//    public void setCfdi(Set<ECfdi> cfdi) {
+//        this.cfdi = cfdi;
+//    }
+//
+//    public Set<EPagos> getPagos() {
+//        return pagos;
+//    }
+//
+//    public void setPagos(Set<EPagos> pagos) {
+//        this.pagos = pagos;
+//    }
 
     @Override
     public int hashCode() {

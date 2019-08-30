@@ -2,4 +2,6 @@
 <Context path="/RestEmisionServices">
   <ResourceLink global="global/jdbc/emision_apl" name="jdbc/emision_apl" type="javax.sql.DataSource"/>
   <ResourceLink global="global/jdbc/miCFD_apl" name="jdbc/miCFD_apl" type="javax.sql.DataSource"/>
+  <ResourceLink global="global/jdbc/dec_emision_apl" name="jdbc/dec_emision_apl" type="javax.sql.DataSource"/>
+  <ResourceLink global="global/jdbc/dec_licencias_apl" name="jdbc/dec_licencias_apl" type="javax.sql.DataSource"/>
 </Context>
