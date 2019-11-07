@@ -7,12 +7,14 @@ import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import fe.pki.PKI;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javax.crypto.Cipher;
 
 public class MongoDAO {
 
@@ -277,6 +279,38 @@ public class MongoDAO {
         } finally {
             cursor.close();
         }
+    }
+
+    public ItKeys getKeys(String collection, String rfc) throws Exception {
+        ItKeys keys = null;
+       PKI pki = new PKI();
+        
+        // Select criteria using cursor
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("rfc", rfc);
+
+        BasicDBObject query = new BasicDBObject(map);
+        DBCollection coll = db.getCollection(collection);
+
+        DBCursor cursor = coll.find(query);
+
+        try {
+            if (cursor.hasNext()) {
+                BasicDBObject bobj = (BasicDBObject) cursor.next();
+
+                keys = new ItKeys();
+                keys.setCer(
+                    pki.cipher_bytes((byte[])bobj.get("key"), "sebh12#", "Blowfish", Cipher.DECRYPT_MODE)
+                );
+                keys.setKey(
+                    pki.cipher_bytes((byte[])bobj.get("cer"), "sebh12#", "Blowfish", Cipher.DECRYPT_MODE)
+                );
+            }
+        } finally {
+            cursor.close();
+        }
+        
+        return keys;
     }
 
     public static class MongoDocument implements Serializable {
