@@ -1,0 +1,85 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC
+    "-//Mort Bay Consulting//DTD Configure//EN"
+    "http://www.eclipse.org/jetty/configure_9_3.dtd">
+
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <Set name="war"><SystemProperty name="jetty.base" default="."/>/webapps/RestEmisionServices.war</Set>
+    <Set name="contextPath">/RestEmisionServices</Set>
+    <Set name="configurationDiscovered">true</Set>
+
+    <New id="emision" class="org.eclipse.jetty.plus.jndi.Resource">
+        <!-- java:comp/env -->
+        <Arg></Arg>
+        <Arg>jdbc/emision</Arg>
+        <Arg>
+            <!-- New class="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource" -->
+            <New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <Set name="driverClassName">com.mysql.jdbc.Driver</Set>
+                <Set name="Url">jdbc:mysql://127.0.0.1:3306/emision</Set>
+                <Set name="User">emision</Set>
+                <Set name="Password">3m1s10n$.</Set>
+            </New>
+        </Arg>
+    </New>
+    <New id="emision_apl" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg></Arg>
+        <Arg>jdbc/emision_apl</Arg>
+        <Arg>
+            <New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <Set name="driverClassName">com.mysql.jdbc.Driver</Set>
+                <Set name="Url">jdbc:mysql://127.0.0.1:3306/emision</Set>
+                <Set name="User">emision_apl</Set>
+                <Set name="Password">3m1s10n$</Set>
+            </New>
+        </Arg>
+    </New>
+    <New id="recepcion" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg></Arg>
+        <Arg>jdbc/recepcion</Arg>
+        <Arg>
+            <New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <Set name="driverClassName">com.mysql.jdbc.Driver</Set>
+                <Set name="Url">jdbc:mysql://127.0.0.1:3306/recepcion</Set>
+                <Set name="User">recepcion</Set>
+                <Set name="Password">r3c3pc10n$.</Set>
+            </New>
+        </Arg>
+    </New>
+    <New id="recepcion_apl" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg></Arg>
+        <Arg>jdbc/recepcion_apl</Arg>
+        <Arg>
+            <New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <Set name="driverClassName">com.mysql.jdbc.Driver</Set>
+                <Set name="Url">jdbc:mysql://127.0.0.1:3306/recepcion</Set>
+                <Set name="User">recepcion_apl</Set>
+                <Set name="Password">r3c3pc10n$.</Set>
+            </New>
+        </Arg>
+    </New>
+    <New id="miCFD" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg></Arg>
+        <Arg>jdbc/miCFD</Arg>
+        <Arg>
+            <New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <Set name="driverClassName">com.mysql.jdbc.Driver</Set>
+                <Set name="Url">jdbc:mysql://127.0.0.1:3306/miCFDigital</Set>
+                <Set name="User">miCFD</Set>
+                <Set name="Password">m1cfd$.</Set>
+            </New>
+        </Arg>
+    </New>
+    <New id="miCFD_apl" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg></Arg>
+        <Arg>jdbc/miCFD_apl</Arg>
+        <Arg>
+            <New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <Set name="driverClassName">com.mysql.jdbc.Driver</Set>
+                <Set name="Url">jdbc:mysql://127.0.0.1:3306/miCFDigital</Set>
+                <Set name="User">miCFD_apl</Set>
+                <Set name="Password">m1cfd$</Set>
+            </New>
+        </Arg>
+    </New>
+</Configure>

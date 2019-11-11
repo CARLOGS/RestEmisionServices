@@ -58,7 +58,7 @@ public class MongoDAO {
         else
             coll.update(docOri, mdoc);
 
-        coll.insert(mdoc);
+//        coll.insert(mdoc);
     }
 
     public void insertDoc(MongoDocument mdoc) throws Exception {
@@ -283,11 +283,58 @@ public class MongoDAO {
 
     public ItKeys getKeys(String collection, String rfc) throws Exception {
         ItKeys keys = null;
-       PKI pki = new PKI();
+        PKI pki = new PKI();
+        
+        BasicDBObject kobj = getDBObject(collection, "rfc", rfc);
+
+        if ( kobj != null ) {
+            keys = new ItKeys();
+            keys.setCer(
+                pki.cipher_bytes((byte[])kobj.get("key"), "sebh12#", "Blowfish", Cipher.DECRYPT_MODE)
+            );
+            keys.setKey(
+                pki.cipher_bytes((byte[])kobj.get("cer"), "sebh12#", "Blowfish", Cipher.DECRYPT_MODE)
+            );
+        }
+        
+        return keys;
+    }
+
+    public void setKeys(ItKeys keys, String collection, String rfc) throws Exception {
+        PKI pki = new PKI();
+        
+        // Antrior
+        BasicDBObject aobj = getDBObject(collection, "rfc", rfc);
+        
+        // Nuevo
+        BasicDBObject nobj= new BasicDBObject("rfc", rfc)
+            .append("fecha", new Date())
+            .append(
+                "key", 
+                pki.cipher_bytes(keys.getKey(), "sebh12#", "Blowfish", Cipher.ENCRYPT_MODE)
+
+            )
+            .append(
+                "cer", 
+                pki.cipher_bytes(keys.getCer(), "sebh12#", "Blowfish", Cipher.ENCRYPT_MODE)
+            );
+        
+        DBCollection coll = db.getCollection(collection);
+        
+        // Hace insert o update
+        if ( aobj == null )
+            coll.insert(nobj);
+        else
+            coll.update(aobj, nobj);
+    }
+
+    // Recupera un JSon con el criterio { node : value }
+    private BasicDBObject getDBObject(String collection, String node, String value) throws Exception {
+        BasicDBObject obj = null;
         
         // Select criteria using cursor
         HashMap<String, String> map = new HashMap<String, String>();
-        map.put("rfc", rfc);
+        map.put(node, value);
 
         BasicDBObject query = new BasicDBObject(map);
         DBCollection coll = db.getCollection(collection);
@@ -295,22 +342,15 @@ public class MongoDAO {
         DBCursor cursor = coll.find(query);
 
         try {
-            if (cursor.hasNext()) {
-                BasicDBObject bobj = (BasicDBObject) cursor.next();
+            
+            if (cursor.hasNext())
+                obj = (BasicDBObject) cursor.next();
 
-                keys = new ItKeys();
-                keys.setCer(
-                    pki.cipher_bytes((byte[])bobj.get("key"), "sebh12#", "Blowfish", Cipher.DECRYPT_MODE)
-                );
-                keys.setKey(
-                    pki.cipher_bytes((byte[])bobj.get("cer"), "sebh12#", "Blowfish", Cipher.DECRYPT_MODE)
-                );
-            }
         } finally {
             cursor.close();
         }
         
-        return keys;
+        return obj;
     }
 
     public static class MongoDocument implements Serializable {
