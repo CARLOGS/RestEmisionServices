@@ -289,10 +289,10 @@ public class MongoDAO {
 
         if ( kobj != null ) {
             keys = new ItKeys();
-            keys.setCer(
+            keys.setKey(
                 pki.cipher_bytes((byte[])kobj.get("key"), "sebh12#", "Blowfish", Cipher.DECRYPT_MODE)
             );
-            keys.setKey(
+            keys.setCer(
                 pki.cipher_bytes((byte[])kobj.get("cer"), "sebh12#", "Blowfish", Cipher.DECRYPT_MODE)
             );
         }
