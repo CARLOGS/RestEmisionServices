@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.Index;
 
 @Entity
-@Table(name="M_CFDI")
+@Table(name="R_CFDI")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "MCfdi.findAll", query = "SELECT m FROM MCfdi m"),

@@ -2,7 +2,6 @@ package fe.db.recepcion;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,11 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.hibernate.annotations.Index;
 
 @Entity
-@Table(name="CLIENTES")
+@Table(name="R_CLIENTES")
 public class MClientes implements Serializable {
     private static final long serialVersionUID = 1L;
     
