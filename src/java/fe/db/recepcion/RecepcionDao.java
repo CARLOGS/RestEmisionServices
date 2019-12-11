@@ -16,17 +16,17 @@ import org.hibernate.Session;
  */
 public class RecepcionDao {
 
-    public MCfdi getCfdi(String uuid) {
-        MCfdi cfdi = null;
+    public RCfdi getCfdi(String uuid) {
+        RCfdi cfdi = null;
         
         Session ss = HibernateRecepcionApl.getSession();
         try {
-            Query qry = ss.getNamedQuery("MCfdi.findUuid");
+            Query qry = ss.getNamedQuery("RCfdi.findUuid");
             qry.setParameter("uuid", uuid);
             
-            List<MCfdi> lst = qry.getResultList();
+            List<RCfdi> lst = qry.getResultList();
             if ( lst != null ) {
-                Iterator<MCfdi> it = lst.iterator();
+                Iterator<RCfdi> it = lst.iterator();
                 if ( it != null && it.hasNext() )
                     cfdi = it.next();
             }
@@ -36,5 +36,46 @@ public class RecepcionDao {
         
         return cfdi;
     }
-    
+
+    public RCfdiPagos getCfdiPagos(String uuid) {
+        RCfdiPagos cfdi = null;
+        
+        Session ss = HibernateRecepcionApl.getSession();
+        try {
+            Query qry = ss.getNamedQuery("RCfdiPagos.findUuid");
+            qry.setParameter("uuid", uuid);
+            
+            List<RCfdiPagos> lst = qry.getResultList();
+            if ( lst != null ) {
+                Iterator<RCfdiPagos> it = lst.iterator();
+                if ( it != null && it.hasNext() )
+                    cfdi = it.next();
+            }
+        } finally {
+            HibernateRecepcionApl.close(ss);
+        }
+        
+        return cfdi;
+    }
+
+    public RCfdiNomina getCfdiNomina(String uuid) {
+        RCfdiNomina cfdi = null;
+        
+        Session ss = HibernateRecepcionApl.getSession();
+        try {
+            Query qry = ss.getNamedQuery("RCfdiNomina.findUuid");
+            qry.setParameter("uuid", uuid);
+            
+            List<RCfdiNomina> lst = qry.getResultList();
+            if ( lst != null ) {
+                Iterator<RCfdiNomina> it = lst.iterator();
+                if ( it != null && it.hasNext() )
+                    cfdi = it.next();
+            }
+        } finally {
+            HibernateRecepcionApl.close(ss);
+        }
+        
+        return cfdi;
+    }    
 }

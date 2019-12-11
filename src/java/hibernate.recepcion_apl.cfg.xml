@@ -49,7 +49,9 @@
     <property name="hibernate.format_sql">true</property>
 
     <!-- "Import" the mapping resources here -->
-	<mapping class="fe.db.recepcion.MCfdi"/>
-	<mapping class="fe.db.recepcion.MClientes"/>
+	<mapping class="fe.db.recepcion.RCfdi"/>
+	<mapping class="fe.db.recepcion.RCfdiPagos"/>
+	<mapping class="fe.db.recepcion.RCfdiNomina"/>
+	<mapping class="fe.db.recepcion.RClientes"/>
   </session-factory>
 </hibernate-configuration> 

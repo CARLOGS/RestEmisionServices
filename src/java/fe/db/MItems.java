@@ -12,14 +12,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Carlo García Sánchez
+ * @author CarloGS
  */
 @Entity
 @Table(name = "ITEMS")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "MItems.findAll", query = "SELECT m FROM MItems m"),
+    @NamedQuery(name = "MItems.findLikeDesc", query = "SELECT m FROM MItems m WHERE m.descripcion like :descripcion AND alcance = 2")
+})
 public class MItems implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

@@ -14,12 +14,12 @@ import org.hibernate.annotations.Index;
 
 @Entity
 @Table(name="R_CLIENTES")
-public class MClientes implements Serializable {
+public class RClientes implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    protected MClientes() {}
+    protected RClientes() {}
     
-    public MClientes(String rfc, String nombre, String email, int estatus, Date fecha, String soloProveedores) {
+    public RClientes(String rfc, String nombre, String email, int estatus, Date fecha, String soloProveedores) {
     	this.rfc = rfc;
     	this.nombre = nombre;
     	this.email = email;

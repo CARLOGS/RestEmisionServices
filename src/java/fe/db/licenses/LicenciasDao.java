@@ -17,6 +17,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 
 /**
  *
@@ -226,5 +227,28 @@ public class LicenciasDao {
         }
 
         return lAdendas;
+    }
+
+    public MItems getItem(String descripcion) {
+        MItems item = null;
+        
+        Session ss = HibernateLicenciasApl.getSession();
+        try {
+            Query<MItems> qry = ss.getNamedQuery("MItems.findLikeDesc");
+            qry.setParameter("descripcion", "%" + descripcion + "%");
+            
+            List<MItems> lst = qry.list();
+            
+            if ( lst != null ) {
+                Iterator<MItems> it = lst.iterator();
+                if ( it.hasNext() )
+                    item = it.next();
+            }
+            
+        } finally {
+            HibernateLicenciasApl.close(ss);
+        }
+
+        return item;
     }
 }

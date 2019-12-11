@@ -12,10 +12,10 @@ import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-import fe.db.recepcion.MCfdi;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import sb.reports.ReportUtils;
 
 /**
  *
@@ -23,18 +23,19 @@ import java.util.ResourceBundle;
  */
 public class MongoRecepcionDAO {
     private static DB db;
+    public static enum TIPO_DOC {CFDI,PAGO,NOMINA};
 
     public MongoRecepcionDAO() throws Exception {
-        ResourceBundle rb = ResourceBundle.getBundle("fe.db.mongo.Mongo");
-        
-        String host = rb.getString("r.mongo.host");
-        String port = rb.getString("r.mongo.port");
-        String dataBase = rb.getString("r.mongo.db");
-        String adminBase = rb.getString("r.mongo.admin.db");
-        String mongoUser = rb.getString("r.mongo.user");
-        String mongoPass = rb.getString("r.mongo.pass");
-        
         if (db == null) {
+            ResourceBundle rb = ResourceBundle.getBundle("fe.db.mongo.Mongo");
+
+            String host = rb.getString("r.mongo.host");
+            String port = rb.getString("r.mongo.port");
+            String dataBase = rb.getString("r.mongo.db");
+            String adminBase = rb.getString("r.mongo.admin.db");
+            String mongoUser = rb.getString("r.mongo.user");
+            String mongoPass = rb.getString("r.mongo.pass");
+        
             MongoClient mongoClient = new MongoClient(
                 Arrays.asList(
                     new ServerAddress(host, port == null || "".equals(port) ? 27017 : Integer.parseInt(port))
@@ -64,7 +65,7 @@ public class MongoRecepcionDAO {
             .append("re", xdata.getRfcEmisor())
             .append("rr", xdata.getRfcReceptor())
             .append("zip", "zip");
-        
+
         if ( xdata.getXml() != null )
             nobj.append(
                 "xmlBytes", 
@@ -111,7 +112,7 @@ public class MongoRecepcionDAO {
         return obj;
     }
 
-    public XmlData getXmlRecepcion(String uuid, MCfdi cfdi) {
+    public XmlData getXmlRecepcion(String uuid, String collection) {
         XmlData xdata = null;
         
         // Selecct criteria using cursor
@@ -119,7 +120,7 @@ public class MongoRecepcionDAO {
         map.put("uuid", uuid);
 
         BasicDBObject query = new BasicDBObject(map);
-        DBCollection coll = db.getCollection(cfdi.getMongoCollection());
+        DBCollection coll = db.getCollection(collection);
 
         DBCursor cursor = coll.find(query);
 
@@ -128,7 +129,7 @@ public class MongoRecepcionDAO {
                 BasicDBObject bobj = (BasicDBObject) cursor.next();
 
                 xdata = new XmlData();
-                xdata.setColl(cfdi.getMongoCollection());
+                xdata.setColl(collection);
 //                xdata.setFecha((Date)bobj.get("date"));
                 xdata.setUuid(bobj.getString("uuid"));
                 xdata.setRfcEmisor(bobj.getString("re"));
@@ -149,5 +150,58 @@ public class MongoRecepcionDAO {
         }
 
         return xdata;
+    }
+
+    public byte[] getXmlBytes(String uuid, String collection) {
+        byte[] bytes = null;
+        
+        try {
+            XmlData xdata = getXmlRecepcion(uuid, collection);
+            bytes = ReportUtils.getCrypUnZip(xdata.getXml(), "sebh12#");
+        } catch(Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        
+        return bytes;
+    }
+
+    public byte[] getPdfBytes(TIPO_DOC tipo, String collection, int estadoDoc, String moneda, String tipoComp, String uuid) {
+        byte[] bytes = null;
+        
+        try {
+            XmlData xdata = getXmlRecepcion(uuid, collection);
+            ReportUtils rutils = new ReportUtils();
+            
+            if ( xdata.getXml() != null ) {
+                bytes = rutils.getCrypUnZip(xdata.getXml(), "sebh12#");
+                bytes = rutils.getPdfRecibidos(
+                    bytes, 
+                    tipo.equals(TIPO_DOC.CFDI) 
+                        ? rutils.getDefRepRecibidos()
+                        : tipo.equals(TIPO_DOC.PAGO)
+                        ? rutils.getDefRepPagRecibidos()
+                        : tipo.equals(TIPO_DOC.NOMINA)
+                        ? rutils.getDefRepNomRecibidos()
+                        : rutils.getDefRepRecibidos(),
+                    estadoDoc == 0, 
+                    false, 
+                    null, 
+                    moneda, 
+                    tipoComp,
+                    tipo.equals(TIPO_DOC.CFDI) 
+                        ? "/Comprobante/Conceptos/Concepto"
+                        : tipo.equals(TIPO_DOC.PAGO) 
+                        ? "/Comprobante/Complemento/Pagos/Pago"
+                        : tipo.equals(TIPO_DOC.NOMINA)
+                        ? "/Comprobante/Conceptos/Concepto"
+                        : "/Comprobante/Conceptos/Concepto",
+                    false
+                );
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        
+        return bytes;
     }
 }
